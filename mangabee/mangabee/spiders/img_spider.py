@@ -36,13 +36,14 @@ class ImageSpider(scrapy.Spider):
 
     def parse(self, response):
         sel = Selector(response)
-        sites = sel.xpath('//*[@id="sct_content"]/div/div[2]/div[2]/img')
+        sites = sel.xpath('//*[@id="sct_content"]/div/div[2]/div[2]/img/@src')
         # OLD ONE #sites = sel.xpath('//*[@id="sct_content"]/div/div[2]/div[2]/img/@src')
         items = []
         for site in sites:
             item = CustomItem()
             # OLD ONE #item['image_urls'] = [site.extract()]
-            item['image_urls'] = [urlparse.urljoin(response.url, u) for u in site.xpath('@src').extract()]
+            # url_array = urlparse.urljoin(response.url, u) for u in site.xpath('@src').extract()
+            item['image_urls'] = [site.extract()] #[urlparse.urljoin(response.url, u) for u in site.xpath('@src').extract()[0]]
             item['image_name'] = [response.url.split("/")[-4] + "_" + response.url.split("/")[-3] + "_" + response.url.split("/")[-2] + ".jpg"]
             #item['image_name'] = ["whatever_you_want"]
             items.append(item)
