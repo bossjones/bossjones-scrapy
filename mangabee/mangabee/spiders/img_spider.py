@@ -1,17 +1,19 @@
+import scrapy
 from scrapy.spider import BaseSpider
 from scrapy.selector import HtmlXPathSelector
 from scrapy.item import Item, Field
 import urlparse
 from scrapy.selector import Selector
+from IPython.core.debugger import Tracer
 
 
-class CustomItem(Item):
+class CustomItem(scrapy.Item):
     image_urls = Field()
     image_name = Field()
     images = Field()
 
 
-class ImageSpider(BaseSpider):
+class ImageSpider(scrapy.Spider):
     name = "customimg"
     allowed_domains = ["www.mangabee.com"]
     max_page = 2 #58
@@ -41,6 +43,8 @@ class ImageSpider(BaseSpider):
             item = CustomItem()
             # OLD ONE #item['image_urls'] = [site.extract()]
             item['image_urls'] = [urlparse.urljoin(response.url, u) for u in site.xpath('@src').extract()]
-            item['image_name'] = [response.url.split("/")[-2] + ".jpg"]
+            item['image_name'] = [response.url.split("/")[-4] + "_" + response.url.split("/")[-3] + "_" + response.url.split("/")[-2] + ".jpg"]
+            #item['image_name'] = ["whatever_you_want"]
             items.append(item)
+            Tracer()()
         return items

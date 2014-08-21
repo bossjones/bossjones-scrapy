@@ -56,4 +56,4 @@ class MangaBeeImagesPipeline(ImagesPipeline):
             yield key, image, buf
 
     def change_filename(self, key, response):
-        return "full/%s.jpg" % response.meta['image_name'][0]
+        return "/Users/malcolm/aot/full/%s.jpg" % response.meta['image_name'][0]
